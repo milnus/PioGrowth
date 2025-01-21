@@ -1,0 +1,13 @@
+Package: PioGrowth
+Title: PioGrowth
+Version: 0.0.1
+Authors@R: person("Magnus", "G. Jespersen", email = "binfie.magnusgj@gmail.com", role = c("aut", "cre"))
+Description: Repository for ShinyLive based app for analysis of Optical Density mesurements produced mainly with a [PioReactor](https://pioreactor.com/)
+License: MIT
+Encoding: UTF-8
+Imports:
+    shiny,
+    testthat
+Suggests:
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
