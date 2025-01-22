@@ -7,6 +7,9 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(PioGrowth)
+library(ggplot2)
+library(vdiffr)
+library(shiny)
+
 
 test_check("PioGrowth")
