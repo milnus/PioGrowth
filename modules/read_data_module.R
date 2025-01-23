@@ -1,7 +1,9 @@
 read_data_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    fileInput(ns("upload"), label = "Load PioReactor OD_readings csv file"),
+    fileInput(ns("upload"),
+              label = "Load PioReactor OD_readings csv file",
+              accept = c(".csv", ".txt")),
     textOutput(ns("status"))  # Add status text output
   )
 }

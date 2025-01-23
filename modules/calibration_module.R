@@ -1,16 +1,18 @@
 calibration_ui <- function(id) {
   ns <- NS(id)
   tagList(
-	# Upload of calibration value csv
-	fileInput(ns("upload_calibration_file"), label = "Manual OD measurments table", accept = c(".csv", ".txt")), 
+    # Upload of calibration value csv
+    fileInput(ns("upload_calibration_file"),
+              label = "Manual OD measurments table",
+              accept = c(".csv", ".txt")),
 
-	# Fixed intercept input box
+    # Fixed intercept input box
     checkboxInput(
       inputId = ns("fixed_intercept"),
       label = "Force intercept through origin",
       value = FALSE
     ),
-	# Origin point addition option
+    # Origin point addition option
     uiOutput(ns("zero_point_box"))
   )
 }
