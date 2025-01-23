@@ -63,7 +63,8 @@ ui <- page_navbar( # NAVIGATION BAR
     title = "Counter",
     layout_column_wrap(
       width = "400px",
-      read_data_ui("counter1")
+      read_data_ui("counter1"),
+      calibration_ui("calibration_process")
     )
   ),
   nav_panel( # ABOUT PANEL

@@ -11,6 +11,7 @@ devtools::load_all("R")
 source("modules/read_data_module.R")
 source("modules/plot_raw_module.R")
 source("modules/filter_reactor_module.R")
+source("modules/calibration_module.R")
 
 # Set options
 options(shiny.maxRequestSize = 100 * 1024^2) # Increase file size for uploads
