@@ -9,14 +9,17 @@ plot_raw_server <- function(id, read_data, filter_data) {
   moduleServer(id, function(input, output, session) {
 
     output$raw_data_plot <- renderPlot({
-    #   req(read_data(), filter_data())
+      # Wait for raw data and filtering information
+      req(read_data(), filter_data())
 
-      message(paste("Reactors selected:", filter_data()$reactor_selection))
-      message(paste("Filtering strategy:", filter_data()$filt_strat))
+      # Return messages for tracking
+      message(paste("[plot_raw_server] - Reactors selected:",
+                    filter_data()$reactor_selection))
+      message(paste("[plot_raw_server] - Filtering strategy:",
+                    filter_data()$filt_strat))
 
+      # Plot the raw data indicating filtering of reactors
       plot_raw_data(read_data(),
-	#   input$reactor_selection,
-	#   filt_strat = input$filt_strat)
                     filter_data()$reactor_selection,
                     filter_data()$filt_strat)
     })
