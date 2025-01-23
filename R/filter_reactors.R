@@ -18,6 +18,7 @@ filter_reactors <- function(pioreactor_data,
   }
 
   if (is.vector(pioreactor_data)) {
+    message("[filter_reactors()] - All reactors filtered out")
     return()
   }
 
