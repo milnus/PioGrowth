@@ -5,5 +5,5 @@ server <- function(input, output, session) {
 
   plot_raw_server("raw_data_plot", read_data, filter_data)
 
-  calibration_server("calibration_process")
+  calibration_server("calibration_process", read_data)
 }

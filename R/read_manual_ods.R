@@ -1,7 +1,6 @@
 #### Function to read in ####
 read_manual_ods <- function(manual_reading_csv) {
   print("[read_manual_ods] - STARTING")
-  print(paste("[read_manual_ods] - File being read:", manual_reading_csv))
   if (is.null(manual_reading_csv)) {
     return(NULL)
   }

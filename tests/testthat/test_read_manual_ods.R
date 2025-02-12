@@ -27,9 +27,9 @@ test_that("Read file with 'reactor' column instead od name - test back compatabi
 
 test_that("Read file missing name column", {
   expect_error(
-    read_manual_ods(test_path("Data", "read_manual_ods", "missing_name.csv")), 
+    read_manual_ods(test_path("Data", "read_manual_ods", "missing_name.csv")),
     class = "Input_error"
-    )
+  )
 })
 
 
