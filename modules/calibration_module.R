@@ -12,8 +12,12 @@ calibration_ui <- function(id) {
       label = "Force intercept through origin",
       value = FALSE
     ),
+
     # Origin point addition option
-    uiOutput(ns("zero_point_box"))
+    uiOutput(ns("zero_point_box")),
+
+    # Add in the x_pio_ods_box ui input
+    uiOutput(ns("x_pio_ods_box"))
   )
 }
 
@@ -31,7 +35,7 @@ calibration_server <- function(id, read_data) {
       manual_od_readings <- read_manual_ods(input$upload_calibration_file$datapath)
 
       # Pass manual OD readings to calibration function
-      complete_od_data <- no_pio_ods_check(manual_od_readings, read_data(), 5) # Add input from ui input "calibration_points"
+      complete_od_data <- no_pio_ods_check(manual_od_readings, read_data(), input$x_pio_ods)
 
       message(manual_od_readings)
 
@@ -46,9 +50,19 @@ calibration_server <- function(id, read_data) {
       # Wait for raw data and filtering information
       req(!input$fixed_intercept)
       # if intercept is not set to fixed give option for origin point
-      origin_point_box()
+      origin_point_box(session$ns)
+    })
+
+    observe({
+      message(paste("[calibration_server] - Add point through origin of calibration:", input$origin_point))
     })
 	
-	# More server functions
+	observe({
+      message(paste("[calibration_server] - Number of ods from pio for calibration:", input$x_pio_ods))
+    })
+    output$x_pio_ods_box <- renderUI({
+      # if intercept is not set to fixed give option for origin point
+      ui_num_od_read(session$ns)
+    })
   })
 }
