@@ -1,9 +1,13 @@
 test_that("Keep reactor", {
-  input_df <- data.frame(hours = 0:5,
-                         "P01" = 50:55,
-                         "P02" = 100:105)
+  input_df <- list("pioreactor_OD_data_wide" = data.frame("hours" = 0:5,
+                                                          "P01" = 50:55,
+                                                          "P02" = 100:105),
+                   "raw_time" = data.frame("hours" = 0:5,
+                                           "P01" = 1:6,
+                                           "P02" = 7:12))
   
-  expected_df <- data.frame(hours = 0:5, "P01" = 50:55)
+  expected_df <- list("pioreactor_OD_data_wide" = data.frame(hours = 0:5, "P01" = 50:55),
+                      "raw_time" = data.frame("hours" = 0:5, "P01" = 1:6))
   
   expect_equal(
     filter_reactors(input_df, pios_of_interest = c("P01"), filt_strat = "Keep"),
@@ -12,11 +16,15 @@ test_that("Keep reactor", {
 })
 
 test_that("Remove reactor", {
-  input_df <- data.frame(hours = 0:5,
-                         "P01" = 50:55,
-                         "P02" = 100:105)
+  input_df <- list("pioreactor_OD_data_wide" = data.frame("hours" = 0:5,
+                                                          "P01" = 50:55,
+                                                          "P02" = 100:105),
+                   "raw_time" = data.frame("hours" = 0:5,
+                                           "P01" = 1:6,
+                                           "P02" = 7:12))
   
-  expected_df <- data.frame(hours = 0:5, "P01" = 50:55)
+  expected_df <- list("pioreactor_OD_data_wide" = data.frame(hours = 0:5, "P01" = 50:55),
+                      "raw_time" = data.frame("hours" = 0:5, "P01" = 1:6))
   
   expect_equal(
     filter_reactors(input_df, pios_of_interest = c("P02"), filt_strat = "Remove"),
@@ -25,9 +33,12 @@ test_that("Remove reactor", {
 })
 
 test_that("Keep/Remove all/no reactors", {
-  input_df <- data.frame(hours = 0:5,
-                         "P01" = 50:55,
-                         "P02" = 100:105)
+  input_df <- list("pioreactor_OD_data_wide" = data.frame("hours" = 0:5,
+                                                          "P01" = 50:55,
+                                                          "P02" = 100:105),
+                   "raw_time" = data.frame("hours" = 0:5,
+                                           "P01" = 1:6,
+                                           "P02" = 7:12))
   
   expected_df <- input_df
   
@@ -43,9 +54,12 @@ test_that("Keep/Remove all/no reactors", {
 })
 
 test_that("Remove all reactors", {
-  input_df <- data.frame(hours = 0:5, 
-                         "P01" = 50:55,
-                         "P02" = 100:105)
+  input_df <- list("pioreactor_OD_data_wide" = data.frame("hours" = 0:5,
+                                                          "P01" = 50:55,
+                                                          "P02" = 100:105),
+                   "raw_time" = data.frame("hours" = 0:5,
+                                           "P01" = 1:6,
+                                           "P02" = 7:12))
   
   expected_df <- NULL
   

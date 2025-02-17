@@ -1,9 +1,12 @@
-no_pio_ods_check <- function(calibration_table, raw_pio_od, x_measurements_oi) {
+no_pio_ods_check <- function(calibration_table, read_data, x_measurements_oi) {
   ##TODO - Make so that this function can be used if only some reactors have calibration measurements from pio and manual
   print("[no_pio_ods_check] - STARTING")
 
   # Create a return list with first and last ten for later plotting.
   first_last_x_list <- list()
+
+  # Isolate the raw pio od readings
+  raw_pio_od <- read_data[["pioreactor_OD_data_wide"]]
 
   # Check if no PioReactor ODs were given
   if (all(is.na(calibration_table[, "pio_od"]))) {
@@ -20,16 +23,13 @@ no_pio_ods_check <- function(calibration_table, raw_pio_od, x_measurements_oi) {
       }
 
       od_readings_oi <- raw_pio_od[, od_column_oi]
-      print(paste("od_readings_oi:", od_readings_oi))
 
       # Remove NAs
       od_readings_oi <- od_readings_oi[!is.na(od_readings_oi)]
 
       # Identify first and last X measurements
       first_od_oi <- od_readings_oi[1:x_measurements_oi]
-      print(paste("first_od_oi:", first_od_oi))
       last_od_oi <- od_readings_oi[(length(od_readings_oi) - x_measurements_oi + 1):length(od_readings_oi)]
-      print(paste("last_od_oi:", last_od_oi))
 
       # Save the top and last X measurements in return list
       first_last_x_list[[name]] <- data.frame(

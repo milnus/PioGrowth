@@ -17,7 +17,12 @@ calibration_ui <- function(id) {
     uiOutput(ns("zero_point_box")),
 
     # Add in the x_pio_ods_box ui input
-    uiOutput(ns("x_pio_ods_box"))
+    uiOutput(ns("x_pio_ods_box")),
+
+    sliderInput(ns("height"), "Plot height", min = 250, max = 1000, value = 500),
+    sliderInput(ns("width"), "Plot width", min = 250, max = 1000, value = 500),
+
+    plotOutput(ns("no_pio_values_plot"))
   )
 }
 
@@ -26,7 +31,7 @@ calibration_server <- function(id, read_data) {
 
 
     # Look for upload of manual calibration file and calibrate ods
-    observe({
+    calibrated_data <- observe({
       req(input$upload_calibration_file, read_data())
       message(paste("[calibration_server] - Upload calibration file:",
                     input$upload_calibration_file$datapath))
@@ -40,19 +45,39 @@ calibration_server <- function(id, read_data) {
                                            input$x_pio_ods)
 
       # Split OD data per reactor
-      manual_lm_models <- split_od_per_reactor(complete_od_data, as.logical(input$fixed_intercept), input$origin_point)
+      manual_lm_models <- split_od_per_reactor(complete_od_data,
+                                               as.logical(input$fixed_intercept),
+                                               input$origin_point)
 
       # Use linear models to predict "true" values for PioReactors
-      od_calibration_readings <- predict_calibrated_ods(manual_lm_models, read_data())
+      od_calibration_readings <- predict_calibrated_ods(manual_lm_models,
+                                                        read_data())
 
-      message(manual_od_readings)
+      ##### Plots #####
+      # Plot the regressions underlying the calibration
+      output$no_pio_values_plot <- renderPlot({
+        if (length(input$fixed_intercept) == 0) {
+          ggplot()
+        } else {
+          calibration_plot(manual_lm_models,
+                           as.logical(input$fixed_intercept),
+                           input$origin_point)
+        }
+      }, res = 96,
+      width = function() input$width,
+      height = function() input$height)
 
-      message(complete_od_data)
+      data_list <- format_calibrated_od_data(read_data(),
+                                             od_calibration_readings)
+
+      # Return the calibrated data
+      return(od_calibration_readings)
     })
 
   # Look at the fixed intercept option and render UI for zero point addition
     observe({
-      message(paste("[calibration_server] - Fixed intercept:", input$fixed_intercept))
+      message(paste("[calibration_server] - Fixed intercept:",
+                    input$fixed_intercept))
     })
     output$zero_point_box <- renderUI({
       # Wait for raw data and filtering information
@@ -62,11 +87,13 @@ calibration_server <- function(id, read_data) {
     })
 
     observe({
-      message(paste("[calibration_server] - Add point through origin of calibration:", input$origin_point))
+      message(paste("[calibration_server] - Add point through origin of calibration:",
+                    input$origin_point))
     })
-	
+
 	observe({
-      message(paste("[calibration_server] - Number of ods from pio for calibration:", input$x_pio_ods))
+    message(paste("[calibration_server] - Number of ods from pio for calibration:",
+                  input$x_pio_ods))
     })
     output$x_pio_ods_box <- renderUI({
       # if intercept is not set to fixed give option for origin point

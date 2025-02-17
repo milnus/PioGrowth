@@ -2,9 +2,10 @@ test_that("1 x_measurements", {
   # Construct OD values with missing measurements in time
   OD_values <- round(seq(0.01, 1.2, length.out = 20), 2)
   OD_values[seq(2, 18, 2)] <- NA
-  input_raw_pio_od <- data.frame("hours" = c(1:20),
-                                 "od_reading.P01" = OD_values,
-                                 "od_reading.P02" = OD_values)
+  input_raw_pio_od <- list("pioreactor_OD_data_wide" = data.frame("hours" = c(1:20),
+                                                                  "od_reading.P01" = OD_values,
+                                                                  "od_reading.P02" = OD_values),
+                           "raw_time" = data.frame())
   
   input_calibration_table <- data.frame("name" = rep(c("P01", "P02"), each = 2),
                                         "pio_od" = NA,
@@ -27,7 +28,7 @@ test_that("1 x_measurements", {
   rownames(expected$first_last_x_df) <- c("P01.1", "P01.2", "P02.1", "P02.2")
   
   expect_equal(no_pio_ods_check(calibration_table = input_calibration_table, 
-                                raw_pio_od = input_raw_pio_od, 
+                                read_data = input_raw_pio_od, 
                                 x_measurements_oi = input_x_measurements), 
                expected)
 })
@@ -36,9 +37,10 @@ test_that("All Pio ODs given", {
   # Construct OD values with missing measurements in time
   OD_values <- round(seq(0.01, 1.2, length.out = 20), 2)
   OD_values[seq(2, 18, 2)] <- NA
-  input_raw_pio_od <- data.frame("hours" = c(1:20),
-                                 "od_reading.P01" = OD_values,
-                                 "od_reading.P02" = OD_values)
+  input_raw_pio_od <- list("pioreactor_OD_data_wide" = data.frame("hours" = c(1:20),
+                                                                  "od_reading.P01" = OD_values,
+                                                                  "od_reading.P02" = OD_values),
+                           "raw_time" = data.frame())
   
   input_calibration_table <- data.frame("name" = rep(c("P01", "P02"), each = 2),
                                         "pio_od" = 1.00,
@@ -51,7 +53,7 @@ test_that("All Pio ODs given", {
                    )
   
   expect_equal(no_pio_ods_check(calibration_table = input_calibration_table, 
-                                raw_pio_od = input_raw_pio_od, 
+                                read_data = input_raw_pio_od, 
                                 x_measurements_oi = input_x_measurements), 
                expected)
 })
@@ -60,9 +62,10 @@ test_that("Some Pio ODs given", {
   # Construct OD values with missing measurements in time
   OD_values <- round(seq(0.01, 1.2, length.out = 20), 2)
   OD_values[seq(2, 18, 2)] <- NA
-  input_raw_pio_od <- data.frame("hours" = c(1:20),
-                                 "od_reading.P01" = OD_values,
-                                 "od_reading.P02" = OD_values)
+  input_raw_pio_od <- list("pioreactor_OD_data_wide" = data.frame("hours" = c(1:20),
+                                                                  "od_reading.P01" = OD_values,
+                                                                  "od_reading.P02" = OD_values),
+                           "raw_time" = data.frame())
   
   input_calibration_table <- data.frame("name" = rep(c("P01", "P02"), each = 2),
                                         "pio_od" = c(0.05, 1.20, NA, NA),
@@ -75,7 +78,7 @@ test_that("Some Pio ODs given", {
   )
   
   expect_equal(no_pio_ods_check(calibration_table = input_calibration_table, 
-                                raw_pio_od = input_raw_pio_od, 
+                                read_data = input_raw_pio_od, 
                                 x_measurements_oi = input_x_measurements), 
                expected)
 })
@@ -84,9 +87,10 @@ test_that("Reactor ODs not found for given Pio name", {
   # Construct OD values with missing measurements in time
   OD_values <- round(seq(0.01, 1.2, length.out = 20), 2)
   OD_values[seq(2, 18, 2)] <- NA
-  input_raw_pio_od <- data.frame("hours" = c(1:20),
-                                 "od_reading.P01" = OD_values,
-                                 "od_reading.P02" = OD_values)
+  input_raw_pio_od <- list("pioreactor_OD_data_wide" = data.frame("hours" = c(1:20),
+                                                                  "od_reading.P01" = OD_values,
+                                                                  "od_reading.P02" = OD_values),
+                           "raw_time" = data.frame())
   
   input_calibration_table <- data.frame("name" = rep(c("P01", "P03"), each = 2),
                                         "pio_od" = NA,
@@ -99,7 +103,7 @@ test_that("Reactor ODs not found for given Pio name", {
   )
   
   expect_error(no_pio_ods_check(calibration_table = input_calibration_table, 
-                                raw_pio_od = input_raw_pio_od, 
+                                read_data = input_raw_pio_od, 
                                 x_measurements_oi = input_x_measurements),
                class = "Input_error")
 })
@@ -108,9 +112,10 @@ test_that("2 x_measurements", {
   # Construct OD values with missing measurements in time
   OD_values <- round(seq(0.01, 1.2, length.out = 20), 2)
   OD_values[seq(2, 18, 2)] <- NA
-  input_raw_pio_od <- data.frame("hours" = c(1:20),
-                                 "od_reading.P01" = OD_values,
-                                 "od_reading.P02" = OD_values)
+  input_raw_pio_od <- list("pioreactor_OD_data_wide" = data.frame("hours" = c(1:20),
+                                                                  "od_reading.P01" = OD_values,
+                                                                  "od_reading.P02" = OD_values),
+                           "raw_time" = data.frame())
   
   input_calibration_table <- data.frame("name" = rep(c("P01", "P02"), each = 2),
                                         "pio_od" = NA,
@@ -134,7 +139,7 @@ test_that("2 x_measurements", {
                    )
   
   expect_equal(no_pio_ods_check(calibration_table = input_calibration_table, 
-                                raw_pio_od = input_raw_pio_od, 
+                                read_data = input_raw_pio_od, 
                                 x_measurements_oi = input_x_measurements), 
                expected)
 })
@@ -143,9 +148,10 @@ test_that("5 x_measurements - innerquantile mean calculation", {
   # Construct OD values with missing measurements in time
   OD_values <- round(seq(0.01, 1.2, length.out = 20), 2)
   OD_values[seq(2, 18, 2)] <- NA
-  input_raw_pio_od <- data.frame("hours" = c(1:20),
-                                 "od_reading.P01" = OD_values,
-                                 "od_reading.P02" = OD_values)
+  input_raw_pio_od <- list("pioreactor_OD_data_wide" = data.frame("hours" = c(1:20),
+                                                                  "od_reading.P01" = OD_values,
+                                                                  "od_reading.P02" = OD_values),
+                           "raw_time" = data.frame())
   
   input_calibration_table <- data.frame("name" = rep(c("P01", "P02"), each = 2),
                                         "pio_od" = NA,
@@ -174,7 +180,7 @@ test_that("5 x_measurements - innerquantile mean calculation", {
   )
   
   expect_equal(no_pio_ods_check(calibration_table = input_calibration_table, 
-                                raw_pio_od = input_raw_pio_od, 
+                                read_data = input_raw_pio_od, 
                                 x_measurements_oi = input_x_measurements), 
                expected)
 })
