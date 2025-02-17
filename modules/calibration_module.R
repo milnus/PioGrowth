@@ -30,12 +30,20 @@ calibration_server <- function(id, read_data) {
       req(input$upload_calibration_file, read_data())
       message(paste("[calibration_server] - Upload calibration file:",
                     input$upload_calibration_file$datapath))
-      
+
       # Read the manual OD readings file
       manual_od_readings <- read_manual_ods(input$upload_calibration_file$datapath)
 
       # Pass manual OD readings to calibration function
-      complete_od_data <- no_pio_ods_check(manual_od_readings, read_data(), input$x_pio_ods)
+      complete_od_data <- no_pio_ods_check(manual_od_readings,
+                                           read_data(),
+                                           input$x_pio_ods)
+
+      # Split OD data per reactor
+      manual_lm_models <- split_od_per_reactor(complete_od_data, as.logical(input$fixed_intercept), input$origin_point)
+
+      # Use linear models to predict "true" values for PioReactors
+      od_calibration_readings <- predict_calibrated_ods(manual_lm_models, read_data())
 
       message(manual_od_readings)
 
