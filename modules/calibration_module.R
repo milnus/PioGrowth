@@ -19,9 +19,20 @@ calibration_ui <- function(id) {
     # Add in the x_pio_ods_box ui input
     uiOutput(ns("x_pio_ods_box")),
 
-    sliderInput(ns("height"), "Plot height", min = 250, max = 1000, value = 500),
-    sliderInput(ns("width"), "Plot width", min = 250, max = 1000, value = 500),
+    # Add downlload button for calibrated data
+    uiOutput(ns("download_button_ui")),
 
+    # Add sliders for plot height and width
+    sliderInput(ns("height"), "Plot height",
+                min = 250,
+                max = 1000, 
+                value = 500),
+    sliderInput(ns("width"), "Plot width",
+                min = 250,
+                max = 1000,
+                value = 500),
+
+    # Add plot of linear calibration regression models
     plotOutput(ns("no_pio_values_plot"))
   )
 }
@@ -52,15 +63,18 @@ calibration_server <- function(id, read_data) {
       return(manual_lm_models)
     })
 
-    formatted_calibration_data <- observeEvent(calibration_models(), {
-      req(read_data(), is.null(calibration_models()))
+    calibrated_data <- reactive({
+      # Require both inputs and validate they're not NULL
+      req(input$upload_calibration_file, read_data())
 
-      # Use linear models to predict "true" values for PioReactors
-      od_calibration_readings <- predict_calibrated_ods(calibration_models(),
-                                                        read_data())
+      predict_calibrated_ods(calibration_models(), read_data())
+    })
+
+    formatted_calibration_data <- observeEvent(calibrated_data(), {
+      req(read_data(), !is.null(calibrated_data()))
 
       data_list <- format_calibrated_od_data(read_data(),
-                                             od_calibration_readings)
+                                             calibrated_data())
     })
 
 
@@ -120,7 +134,15 @@ calibration_server <- function(id, read_data) {
                     col.names = TRUE,
                     sep = ",", na = "",
                     quote = FALSE)
-    }
-  )
+      }
+    )
+
+    # Render download button
+    output$download_button_ui <- renderUI({
+      req(!is.null(calibrated_data()))
+      downloadButton(session$ns("download_table"),
+                     label = "Download calibrated data")
+      # }
+    })
   })
 }

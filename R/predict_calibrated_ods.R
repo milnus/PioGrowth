@@ -10,12 +10,10 @@ predict_calibrated_ods <- function(calibration_models, read_data) {
   for (name in reactor_names){
 	reactor_col_oi <- grep(name, names(raw_data))
     raw_data_isolate <- raw_data[, c(1, reactor_col_oi)]
-    print(paste("raw_data_isolate:", raw_data_isolate))
 
     colnames(raw_data_isolate)[2] <- 'pio_od'
     model <- calibration_models[[name]]$calibration_model
 
-    print(read_data[["raw_time"]])
     calibrated_od_list[[name]] <- data.frame("hours" = raw_data_isolate[, 1],
                                              "Calibrated_OD" = predict(model, raw_data_isolate),
 											 "raw_time" = read_data[["raw_time"]][, reactor_col_oi-1])
