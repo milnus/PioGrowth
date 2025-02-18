@@ -9,7 +9,7 @@ user_pio_selection <- function(read_data, reactor_selection, ns) {
               label = "Select Pioreactors to remove or keep 
               based on option above\n(red plots will be 
               removed and green will be keep in further analyses)",
-              choices = stringr::str_replace(names(read_data),
+              choices = stringr::str_replace(names(read_data[["pioreactor_OD_data_wide"]]),
                             pattern = "od_reading\\.", "")[-1],
               selected = reactor_selection,
               multiple = TRUE)
