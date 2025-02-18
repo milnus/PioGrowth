@@ -5,14 +5,14 @@ calibration_plot <- function(od_calibration_readings, fixed_intercept, add_zero_
   print(paste("[calibration_plot] - add_zero_point:", add_zero_point))
   print(paste("[calibration_plot] - length(add_zero_point):", length(add_zero_point)))
 
-  if (length(add_zero_point) == 0){
+  if (length(add_zero_point) == 0) {
     add_zero_point <- FALSE
   }
   print(od_calibration_readings)
   linear_regress_plots <- lapply(od_calibration_readings, function(x) {
-	print(x)
+    print(x)
     # Set the intercept and slope of the model
-    if (fixed_intercept){
+    if (fixed_intercept) {
       slope_coefficient <- summary(x$calibration_model)$coefficients[1]
       intercept_coefficient <- 0
     } else {
