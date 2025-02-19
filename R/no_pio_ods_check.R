@@ -1,4 +1,4 @@
-no_pio_ods_check <- function(calibration_table, read_data, x_measurements_oi) {
+no_pio_ods_check <- function(calibration_table, od_data_list, x_measurements_oi) {
   ##TODO - Make so that this function can be used if only some reactors have calibration measurements from pio and manual
   print("[no_pio_ods_check] - STARTING")
 
@@ -6,7 +6,8 @@ no_pio_ods_check <- function(calibration_table, read_data, x_measurements_oi) {
   first_last_x_list <- list()
 
   # Isolate the raw pio od readings
-  raw_pio_od <- read_data[["pioreactor_OD_data_wide"]]
+  raw_pio_od <- od_data_list[["filtered_data"]][["pioreactor_OD_data_wide"]]
+  message(raw_pio_od)
 
   # Check if no PioReactor ODs were given
   if (all(is.na(calibration_table[, "pio_od"]))) {
@@ -17,9 +18,12 @@ no_pio_ods_check <- function(calibration_table, read_data, x_measurements_oi) {
       od_column_oi <- grep(paste0("od_reading.", name), colnames(raw_pio_od))
 
       if (length(od_column_oi) == 0) {
-        stop(errorCondition(message =
-            paste("No reactor found in dataset named:", name),
-            class = "Input_error"))
+        shiny::showNotification(ui = paste("No reactor found in dataset named:", name,
+                                           "\nWill skip calibration and processing of this reactor"),
+                                duration = NULL, type = "error")
+        # stop(errorCondition(message =
+        #     paste("No reactor found in dataset named:", name),
+        #     class = "Input_error"))
       }
 
       od_readings_oi <- raw_pio_od[, od_column_oi]

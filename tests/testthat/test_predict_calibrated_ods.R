@@ -7,11 +7,22 @@ test_that("Normal function",{
                             "P02" = list("calibration_model" = lm(formula = manual_od ~ pio_od, 
                                                                   data = calibration_data)))
   
-  read_data <- list("pioreactor_OD_data_wide" = data.frame("hours" = c(1:20),
-                                                           "P01" = seq(0.01, 1.2, length.out = 20),
-                                                           "P02" = seq(0.01, 1.2, length.out = 20)),
-                    "raw_time" = data.frame("P01.raw_hours" = c(3:22),
-                                          "P02.raw_hours" = c(3:22)))
+  read_data <- list("raw_data" = list("pioreactor_OD_data_wide" = data.frame("hours" = c(1:20),
+                                                                             "P01" = seq(0.01, 1.2, length.out = 20),
+                                                                             "P02" = seq(0.01, 1.2, length.out = 20)),
+                                      "raw_time" = data.frame("hours" = c(1:20),
+                                                              "P01" = c(3:22),
+                                                              "P02" = c(3:22))),
+                    "filtered_data" = list("pioreactor_OD_data_wide" = 
+                                             data.frame("hours" = c(1:20),
+                                                        "P01" = seq(0.01, 1.2, length.out = 20),
+                                                        "P02" = seq(0.01, 1.2, length.out = 20)),
+                                           "raw_time" = 
+                                             data.frame("hours" = c(1:20),
+                                                        "P01" = c(3:22),
+                                                        "P02" = c(3:22))),
+                    "filtering_state" = list("reactors_selected" = c(),
+                                             "filtering_strategy" = "Remove"))
   
   expect_snapshot(predict_calibrated_ods(calibration_model, read_data))
   }

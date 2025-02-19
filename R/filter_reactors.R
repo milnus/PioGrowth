@@ -6,8 +6,8 @@ filter_reactors <- function(pioreactor_data,
   # Check if filtering is required
   if (!is.null(pios_of_interest)) {
     # Construct regex string and search for reactor columns
-    regex_s <- paste0(pios_of_interest, collapse = "|")
-    columns_oi <- grep(regex_s, names(pioreactor_data[[1]]), ignore.case = TRUE)
+    regex_str <- paste0(pios_of_interest, collapse = "|")
+    columns_oi <- grep(regex_str, names(pioreactor_data[[1]]), ignore.case = TRUE)
 
     # Keep reactors selected by user else remove:
     if (filt_strat == "Keep") {

@@ -37,21 +37,24 @@ calibration_ui <- function(id) {
   )
 }
 
-calibration_server <- function(id, read_data) {
+calibration_server <- function(id, od_data_list) {
   moduleServer(id, function(input, output, session) {
 
     # Look for upload of manual calibration file and calibrate ods
     calibration_models <- reactive({
-      req(input$upload_calibration_file, read_data())
+      req(input$upload_calibration_file, od_data_list())
       message(paste("[calibration_server] - Upload calibration file:",
                     input$upload_calibration_file$datapath))
 
       # Read the manual OD readings file
       manual_od_readings <- read_manual_ods(input$upload_calibration_file$datapath)
 
+      # Filter manual readings based on filtering strategy
+      filtered_manual_od <- filter_manual_ods(manual_od_readings, od_data_list())
+
       # Pass manual OD readings to calibration function
-      complete_od_data <- no_pio_ods_check(manual_od_readings,
-                                           read_data(),
+      complete_od_data <- no_pio_ods_check(filtered_manual_od,
+                                           od_data_list(),
                                            input$x_pio_ods)
 
       # Split OD data per reactor
@@ -65,16 +68,17 @@ calibration_server <- function(id, read_data) {
 
     calibrated_data <- reactive({
       # Require both inputs and validate they're not NULL
-      req(input$upload_calibration_file, read_data())
+      req(input$upload_calibration_file, od_data_list())
 
-      predict_calibrated_ods(calibration_models(), read_data())
+      predict_calibrated_ods(calibration_models(), od_data_list())
     })
 
-    formatted_calibration_data <- observeEvent(calibrated_data(), {
-      req(read_data(), !is.null(calibrated_data()))
+    formatted_calibration_data <- reactive({
+      req(od_data_list(), !is.null(calibrated_data()))
 
-      data_list <- format_calibrated_od_data(read_data(),
+      data_list <- format_calibrated_od_data(od_data_list(),
                                              calibrated_data())
+      return(data_list)
     })
 
 
@@ -145,4 +149,9 @@ calibration_server <- function(id, read_data) {
       # }
     })
   })
+
+  return(reactive({
+    req(!is.null(formatted_calibration_data()))
+    formatted_calibration_data
+  }))
 }
