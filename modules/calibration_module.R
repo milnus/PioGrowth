@@ -33,6 +33,7 @@ calibration_ui <- function(id) {
                 value = 500),
 
     # Add plot of linear calibration regression models
+    plotOutput(ns("zero_intercept_plot")),
     plotOutput(ns("no_pio_values_plot"))
   )
 }
@@ -41,7 +42,7 @@ calibration_server <- function(id, od_data_list) {
   moduleServer(id, function(input, output, session) {
 
     # Look for upload of manual calibration file and calibrate ods
-    calibration_models <- reactive({
+    complete_od_data <- reactive({
       req(input$upload_calibration_file, od_data_list())
       message(paste("[calibration_server] - Upload calibration file:",
                     input$upload_calibration_file$datapath))
@@ -57,8 +58,12 @@ calibration_server <- function(id, od_data_list) {
                                            od_data_list(),
                                            input$x_pio_ods)
 
+      return(complete_od_data)
+    })
+
+    calibration_models <- reactive({
       # Split OD data per reactor
-      manual_lm_models <- split_od_per_reactor(complete_od_data,
+      manual_lm_models <- split_od_per_reactor(complete_od_data(),
                                                as.logical(input$fixed_intercept),
                                                input$origin_point)
 
@@ -111,6 +116,13 @@ calibration_server <- function(id, od_data_list) {
     })
 
     ##### Plots #####
+    # Plot the points that are used for calibration of the pio reactors
+    output$zero_intercept_plot <- renderPlot({
+      first_last_od_plot(complete_od_data(), input$x_pio_ods)
+    }, res = 96,
+    width = function() input$width,
+    height = function() input$height)
+
     # Plot the regressions underlying the calibration
     output$no_pio_values_plot <- renderPlot({
       req(!is.null(calibration_models()))
