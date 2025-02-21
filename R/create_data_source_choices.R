@@ -9,9 +9,10 @@ create_data_source_choices <- function(raw_data, calibrated_data) {
   if (!is.null(calibrated_data)) {
     choices <- c(choices, "calibrated" = "calibrated")
   }
-  if (!is.null(raw_data) && !is.null(calibrated_data)) {
-    choices <- c(choices, "compare" = "compare")
-  }
+  # Not yet implemented in the app
+  # if (!is.null(raw_data) && !is.null(calibrated_data)) {
+  #   choices <- c(choices, "compare" = "compare")
+  # }
 
   return(choices)
 }
