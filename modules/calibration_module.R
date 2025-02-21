@@ -62,6 +62,7 @@ calibration_server <- function(id, od_data_list) {
     })
 
     calibration_models <- reactive({
+      req(complete_od_data())
       # Split OD data per reactor
       manual_lm_models <- split_od_per_reactor(complete_od_data(),
                                                as.logical(input$fixed_intercept),
@@ -72,6 +73,7 @@ calibration_server <- function(id, od_data_list) {
     })
 
     calibrated_data <- reactive({
+      req(calibration_models())
       # Require both inputs and validate they're not NULL
       req(input$upload_calibration_file, od_data_list())
 
@@ -160,10 +162,20 @@ calibration_server <- function(id, od_data_list) {
                      label = "Download calibrated data")
       # }
     })
-  })
 
-  return(reactive({
-    req(!is.null(formatted_calibration_data()))
-    formatted_calibration_data
-  }))
+    return(reactive({
+      message("[calibration_server] - RETURN: try od_data_list")
+      tryCatch(
+        {
+          result <- formatted_calibration_data()
+          if (is.null(result)) return(NULL)
+          result
+        },
+        error = function(e) {
+          message("[calibration_server] - RETURN: od_data_list failed - returning NULL")
+          NULL
+        }
+      )
+    }))
+  })
 }

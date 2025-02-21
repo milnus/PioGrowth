@@ -7,5 +7,7 @@ server <- function(input, output, session) {
 
   calibrated_data <- calibration_server("calibration_process", filter_data)
 
-  batch_analysis_server("batch_analysis", calibrated_data)
+  batch_analysis_server("batch_analysis",
+                        calibrated_od_data_list = calibrated_data,
+                        raw_od_data_list = filter_data)
 }
