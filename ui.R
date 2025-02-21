@@ -67,7 +67,7 @@ ui <- page_navbar( # NAVIGATION BAR
       calibration_ui("calibration_process")
     )
   ),
-  nav_panel( # Batch PANEL
+  nav_panel( # COUNTER PANEL
     title = "Batch growth analysis",
     layout_column_wrap(
       width = "400px",

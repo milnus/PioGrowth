@@ -18,6 +18,7 @@ filter_reactors_server <- function(id, read_data) {
 
     # Make list of filtering information for plotting
     filter_return_list <- reactive({
+      req(read_data())
       # Message for tracking
       message(paste("[filter_reactors_server] - input$reactor_selection:",
                     paste(input$reactor_selection, collapse = ", ")))
@@ -53,15 +54,6 @@ filter_reactors_server <- function(id, read_data) {
           NULL
         }
       )
-  }))
-    # return(reactive({
-    #   print(filter_return_list())
-    #   message("[filter_reactors_server] - RETURN: try od_data_list")
-    #   return(filter_return_list())
-    #   message("[filter_reactors_server] - RETURN: od_data_list failed - returning NULL")
-    #   return()
-
-    #   # tryCatch(filter_return_list(), return())
-    # }))
+    }))
   })
 }

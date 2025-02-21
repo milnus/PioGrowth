@@ -102,11 +102,13 @@ calibration_server <- function(id, od_data_list) {
     })
 
     observe({
+      req(od_data_list())
       message(paste("[calibration_server] - Add point through origin of calibration:",
                     input$origin_point))
     })
 
     observe({
+      req(od_data_list())
       message(paste("[calibration_server] - Number of ods from pio for calibration:",
                     input$x_pio_ods))
     })
