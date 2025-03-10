@@ -1,16 +1,20 @@
 # Custom theme
-my_theme <- bs_theme(
-  bootswatch = "flatly",
-  primary = "#d0fbde",
-  "navbar-bg-color" = "#0c8835"
+piogrowth_theme <- bs_theme(version = 5,
+                     bootswatch = "flatly",
+                     fg = "black", # Colour of text in ForeGround
+                     bg = "#FFFFFF", # Colour of the background
+                     primary = "#d0fbde",
+                     secondary = "lightgrey", # Colour of buttons mainly
+                     "navbar-bg" = "#0c8835",
+                     
 )
 
-nav_ops <- navbar_options(bg = "#0c8835")
+# nav_ops <- bslib::nav_op (bg = "#0c8835")
 
 ui <- page_navbar(
   # NAVIGATION BAR
-  theme = my_theme,
-  navbar_options = nav_ops,
+  theme = piogrowth_theme,
+  # nav_options = nav_ops,
   title = "PioGrowth",
   nav_panel(
     # HOME PANEL
