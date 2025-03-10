@@ -7,8 +7,17 @@ batch_analysis_ui <- function(id) {
     # Render button to process data
     actionButton(ns("process_batch"), "Process data batch growth"),
 
+    # Render radio button for showing of removing points in plot
+    uiOutput(ns("UserPointRemoval")),
+
+    # Let the user define what a high mu is using a slide
+    uiOutput(ns("UserHighMuPercentage")),
+
     # Render plot of growth data
-    plotOutput(ns("plot_batch_growth"))
+    plotOutput(ns("plot_batch_growth")),
+
+    # Render plot of growth rate data
+    plotOutput(ns("growth_rate_plot"))
   )
 }
 
@@ -116,20 +125,48 @@ batch_analysis_server <- function(
         fitted_spline_data_return[["spline_data"]] <- spline_growth_integration(
           fitted_spline_data_return,
           spline_smoothing = 1.0
-        ) #input$spline_smoothing)
+        )
 
         return(fitted_spline_data_return)
       })
     })
 
+    # Summarise growth data
+    # Summarise growth data
+    summarised_growth_data <- reactive({
+      req(fitted_spline_data())
+
+      summarise_growth_data(
+        fitted_spline_data(),
+        input$high_mu_percentage / 100
+      )
+    })
+
     #### Plot output ####
+    ## Let the user turn of points in growth plot
+    output$UserPointRemoval <- renderUI({
+      user_point_removal(session$ns, input$remove_points)
+    })
+
+    # Plot the growth data with a spline coloured by growth rate
     output$plot_batch_growth <- renderPlot(
       {
-        req(fitted_spline_data())
+        req(fitted_spline_data(), input$remove_points)
         message("[batch_analysis_server] - Plotting growth data")
         withProgress(message = "Creating plot", value = 0.9, {
-          plot_growth_data(fitted_spline_data(), remove_points = FALSE) #, input$remove_points)
+          plot_growth_data(
+            fitted_spline_data(),
+            remove_points = input$remove_points
+          )
         })
+      },
+      res = 96
+    )
+
+    # Plot the growth rate over time coloured by growth rate
+    output$growth_rate_plot <- renderPlot(
+      {
+        plot_growth_rate_data(fitted_spline_data(), summarised_growth_data())
       },
       res = 96
     )
@@ -151,6 +188,14 @@ batch_analysis_server <- function(
           selected = choices[1] # Default to first available option
         )
       }
+    })
+
+    # Render a slider for high mu selection
+    output$UserHighMuPercentage <- renderUI({
+      high_mu_range_slider(
+        session$ns,
+        input$high_mu_percentage
+      )
     })
 
     observe(fitted_spline_data())
