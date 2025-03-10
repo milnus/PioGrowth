@@ -4,9 +4,11 @@ filter_manual_ods <- function(manual_od_readings, od_data_list) {
     return(manual_od_readings)
   }
   # Identify the rows of reactors of interest
-  regex_str <- paste0(od_data_list[["filtering_state"]][["reactors_selected"]], collapse = "|")
+  regex_str <- paste0(
+    od_data_list[["filtering_state"]][["reactors_selected"]],
+    collapse = "|"
+  )
   rows_oi <- grep(regex_str, manual_od_readings$name, ignore.case = TRUE)
-
 
   if (od_data_list[["filtering_state"]][["filtering_strategy"]] == "Keep") {
     manual_od_readings_filtered <- manual_od_readings[rows_oi, ]

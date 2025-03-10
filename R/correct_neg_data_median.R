@@ -1,4 +1,5 @@
-correct_neg_data_median <- function(od_data, outlier_df) { # Hanndle NA reading and add the outlier masking/removal
+correct_neg_data_median <- function(od_data, outlier_df) {
+  # Hanndle NA reading and add the outlier masking/removal
   # Set window to take median
   k_range <- 31
   k <- k_range %/% 2
@@ -7,8 +8,7 @@ correct_neg_data_median <- function(od_data, outlier_df) { # Hanndle NA reading 
 
   od_data_neg_corrected <- od_data
 
-
-  for (col_i in od_columns){
+  for (col_i in od_columns) {
     # Mask outliers
     od_data_neg_corrected[outlier_df[, col_i], col_i] <- NA
     # Get indexes of negative measurments
@@ -22,7 +22,11 @@ correct_neg_data_median <- function(od_data, outlier_df) { # Hanndle NA reading 
           upper_bound <- i + k
 
           lower_bound <- ifelse(lower_bound > 0, lower_bound, 1)
-          upper_bound <- ifelse(upper_bound > nrow(od_data), nrow(od_data), upper_bound)
+          upper_bound <- ifelse(
+            upper_bound > nrow(od_data),
+            nrow(od_data),
+            upper_bound
+          )
 
           # Find the values in the range k
           k_values <- od_data[, col_i][lower_bound:upper_bound]
@@ -37,7 +41,11 @@ correct_neg_data_median <- function(od_data, outlier_df) { # Hanndle NA reading 
             upper_bound <- i + k
 
             lower_bound <- ifelse(lower_bound > 0, lower_bound, 1)
-            upper_bound <- ifelse(upper_bound > nrow(od_data), nrow(od_data), upper_bound)
+            upper_bound <- ifelse(
+              upper_bound > nrow(od_data),
+              nrow(od_data),
+              upper_bound
+            )
 
             k_values <- od_data[, col_i][lower_bound:upper_bound]
 

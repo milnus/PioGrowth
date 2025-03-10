@@ -1,7 +1,9 @@
 # Function to calculate innerquantile mean (IQM)
 iqm <- function(x) {
-  y <- mean(x[x >= quantile(x, 0.25) &
-            x <= quantile(x, 0.75)])
+  y <- mean(x[
+    x >= quantile(x, 0.25) &
+      x <= quantile(x, 0.75)
+  ])
 }
 
 first_last_od_plot <- function(complete_calibration_data, x_pio_ods) {
@@ -18,15 +20,25 @@ first_last_od_plot <- function(complete_calibration_data, x_pio_ods) {
       geom_point(position = position_nudge(x = x_nudge)) +
       facet_grid(. ~ position)
 
-	# Check if inner quartile mean or mean should be plotted
-    if (x_pio_ods < 5){
-      p <- p + stat_summary(geom = "point", fun = "mean",
-                            colour = "red", shape = 16,
-                            position = position_nudge(x = -x_nudge))
+    # Check if inner quartile mean or mean should be plotted
+    if (x_pio_ods < 5) {
+      p <- p +
+        stat_summary(
+          geom = "point",
+          fun = "mean",
+          colour = "red",
+          shape = 16,
+          position = position_nudge(x = -x_nudge)
+        )
     } else {
-      p <- p + stat_summary(geom = "point", fun = iqm,
-                            colour = "red", shape = 16,
-                            position = position_nudge(x = -x_nudge))
+      p <- p +
+        stat_summary(
+          geom = "point",
+          fun = iqm,
+          colour = "red",
+          shape = 16,
+          position = position_nudge(x = -x_nudge)
+        )
     }
 
     return(p)

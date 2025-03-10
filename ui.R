@@ -5,11 +5,15 @@ my_theme <- bs_theme(
   "navbar-bg-color" = "#0c8835"
 )
 
-ui <- page_navbar( # NAVIGATION BAR
+nav_ops <- navbar_options(bg = "#0c8835")
+
+ui <- page_navbar(
+  # NAVIGATION BAR
   theme = my_theme,
-  bg = "#0c8835",
+  navbar_options = nav_ops,
   title = "PioGrowth",
-  nav_panel( # HOME PANEL
+  nav_panel(
+    # HOME PANEL
     title = "Home",
     layout_column_wrap(
       width = "500px",
@@ -21,7 +25,9 @@ ui <- page_navbar( # NAVIGATION BAR
         card_body(
           height = "250px",
           h4("Intro"),
-          p("This is a simple multi-page Shiny application showcasing modules and modern UI design."),
+          p(
+            "This is a simple multi-page Shiny application showcasing modules and modern UI design."
+          ),
           p("Navigate using the menu above to explore different sections.")
         ),
       ),
@@ -33,16 +39,16 @@ ui <- page_navbar( # NAVIGATION BAR
         read_data_ui("read_data")
       ),
       card(
-		height = "800px",
+        height = "800px",
         card_header(
           class = "bg-primary text",
-		  "Raw data plotted"
+          "Raw data plotted"
         ),
         plot_raw_data_ui("raw_data_plot")
       ),
-	  card(
+      card(
         filter_reactors_ui("filter_reactors"),
-	  ),
+      ),
       card(
         card_header(
           class = "bg-primary text",
@@ -59,7 +65,8 @@ ui <- page_navbar( # NAVIGATION BAR
       )
     )
   ),
-  nav_panel( # COUNTER PANEL
+  nav_panel(
+    # COUNTER PANEL
     title = "Counter",
     layout_column_wrap(
       width = "400px",
@@ -67,14 +74,16 @@ ui <- page_navbar( # NAVIGATION BAR
       calibration_ui("calibration_process")
     )
   ),
-  nav_panel( # COUNTER PANEL
+  nav_panel(
+    # COUNTER PANEL
     title = "Batch growth analysis",
     layout_column_wrap(
       width = "400px",
       batch_analysis_ui("batch_analysis")
     )
   ),
-  nav_panel( # ABOUT PANEL
+  nav_panel(
+    # ABOUT PANEL
     title = "About",
     card(
       card_header(

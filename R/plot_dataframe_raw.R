@@ -20,13 +20,19 @@ plot_dataframe_raw <- function(dataframe, name, filter_vector, filt_strat) {
 
   dataframe <- dataframe[!is.na(dataframe[, 2]), ]
 
-  p <- ggplot(dataframe,
-              aes(x = timestamp, y = od_reading, colour = od_reading < 0)) +
+  p <- ggplot(
+    dataframe,
+    aes(x = timestamp, y = od_reading, colour = od_reading < 0)
+  ) +
     geom_point(alpha = 0.75) +
     ggtitle(plot_title) +
-    theme(axis.title = element_blank(),
-          panel.background = element_rect(fill = background_col, 
-                                          color = background_col)) +
+    theme(
+      axis.title = element_blank(),
+      panel.background = element_rect(
+        fill = background_col,
+        color = background_col
+      )
+    ) +
     scale_color_manual(values = c("black", "red")) +
     theme(legend.position = "none")
 

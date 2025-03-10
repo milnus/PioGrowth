@@ -9,11 +9,14 @@ batch_analysis_ui <- function(id) {
 
     # Render plot of growth data
     plotOutput(ns("plot_batch_growth"))
-
   )
 }
 
-batch_analysis_server <- function(id, calibrated_od_data_list, raw_od_data_list) {
+batch_analysis_server <- function(
+  id,
+  calibrated_od_data_list,
+  raw_od_data_list
+) {
   moduleServer(id, function(input, output, session) {
     # Observe process button
     process_batch <- eventReactive(input$process_batch, {
@@ -22,16 +25,27 @@ batch_analysis_server <- function(id, calibrated_od_data_list, raw_od_data_list)
         return(TRUE)
       })
     })
-    observe(message(paste("[batch_analysis_server] - Start processing as batch:", process_batch())))
+    observe(message(paste(
+      "[batch_analysis_server] - Start processing as batch:",
+      process_batch()
+    )))
 
     # Set data to be used for analysis
     od_data_list <- reactive({
-      req(process_batch(), !is.null(calibrated_od_data_list()) | !is.null(raw_od_data_list()))
+      req(
+        process_batch(),
+        !is.null(calibrated_od_data_list()) | !is.null(raw_od_data_list())
+      )
 
       withProgress(message = "Loading data", value = 0.2, {
-        message("[batch_analysis_server] - input$data_source:", input$data_source)
+        message(
+          "[batch_analysis_server] - input$data_source:",
+          input$data_source
+        )
         if (input$data_source == "calibrated") {
-          message("[batch_analysis_server] - Using calibrated data for batch analysis")
+          message(
+            "[batch_analysis_server] - Using calibrated data for batch analysis"
+          )
           return(calibrated_od_data_list())
         } else {
           message("[batch_analysis_server] - Using raw data for batch analysis")
@@ -49,7 +63,9 @@ batch_analysis_server <- function(id, calibrated_od_data_list, raw_od_data_list)
         if (input$data_source == "calibrated") {
           od_data <- calibrated_od_data_list()[["calibrated_data"]]
         } else {
-          od_data <- raw_od_data_list()[["filtered_data"]][["pioreactor_OD_data_wide"]]
+          od_data <- raw_od_data_list()[["filtered_data"]][[
+            "pioreactor_OD_data_wide"
+          ]]
         }
 
         return(od_data)
@@ -64,7 +80,9 @@ batch_analysis_server <- function(id, calibrated_od_data_list, raw_od_data_list)
 
         od_data_list_outlier_detected <- od_data_list()
 
-        od_data_list_outlier_detected[["outliers"]] <- iqr_outlier_detection(od_data())
+        od_data_list_outlier_detected[[
+          "outliers"
+        ]] <- iqr_outlier_detection(od_data())
 
         return(od_data_list_outlier_detected)
       })
@@ -77,8 +95,12 @@ batch_analysis_server <- function(id, calibrated_od_data_list, raw_od_data_list)
       withProgress(message = "Correcting negative measurement", value = 0.5, {
         od_data_list_neg_corrected <- od_data_list_outlier_detected()
 
-        od_data_list_neg_corrected[["negative_corrected"]] <- correct_neg_data_median(od_data(),
-                                                                od_data_list_neg_corrected[["outliers"]])
+        od_data_list_neg_corrected[[
+          "negative_corrected"
+        ]] <- correct_neg_data_median(
+          od_data(),
+          od_data_list_neg_corrected[["outliers"]]
+        )
 
         return(od_data_list_neg_corrected)
       })
@@ -91,22 +113,26 @@ batch_analysis_server <- function(id, calibrated_od_data_list, raw_od_data_list)
       withProgress(message = "Fitting growth curves", value = 0.6, {
         fitted_spline_data_return <- od_data_list_neg_corrected()
 
-        fitted_spline_data_return[["spline_data"]] <- spline_growth_integration(fitted_spline_data_return,
-                                                        spline_smoothing = 1.0) #input$spline_smoothing)
+        fitted_spline_data_return[["spline_data"]] <- spline_growth_integration(
+          fitted_spline_data_return,
+          spline_smoothing = 1.0
+        ) #input$spline_smoothing)
 
-      return(fitted_spline_data_return)
+        return(fitted_spline_data_return)
       })
     })
 
-
     #### Plot output ####
-    output$plot_batch_growth <- renderPlot({
-      req(fitted_spline_data())
-      message("[batch_analysis_server] - Plotting growth data")
-      withProgress(message = "Creating plot", value = 0.9, {
-        plot_growth_data(fitted_spline_data(), remove_points = FALSE)#, input$remove_points)
-      })
-    }, res = 96)
+    output$plot_batch_growth <- renderPlot(
+      {
+        req(fitted_spline_data())
+        message("[batch_analysis_server] - Plotting growth data")
+        withProgress(message = "Creating plot", value = 0.9, {
+          plot_growth_data(fitted_spline_data(), remove_points = FALSE) #, input$remove_points)
+        })
+      },
+      res = 96
+    )
 
     #### UI output ####
     # Find the data sources available
@@ -122,12 +148,11 @@ batch_analysis_server <- function(id, calibrated_od_data_list, raw_od_data_list)
           inputId = session$ns("data_source"),
           label = "Select data source",
           choices = choices,
-          selected = choices[1]  # Default to first available option
+          selected = choices[1] # Default to first available option
         )
       }
     })
 
     observe(fitted_spline_data())
   })
-
 }
