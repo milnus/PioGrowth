@@ -17,7 +17,27 @@ batch_analysis_ui <- function(id) {
     plotOutput(ns("plot_batch_growth")),
 
     # Render plot of growth rate data
-    plotOutput(ns("growth_rate_plot"))
+    plotOutput(ns("growth_rate_plot")),
+
+    # Render download options for plots
+    downloadButton(
+      ns("download_growth_plot"),
+      "Download Growth Plot"
+    ),
+    downloadButton(
+      ns("download_growth_rate_plot"),
+      "Download Growth Rate Plot"
+    ),
+
+    # Render summary table and download button
+    downloadButton(ns("download_table"), "Download Summarised Data"),
+    tableOutput(ns("summary_table")),
+
+    # Allow download of full spline dataset
+    downloadButton(
+      ns("download_raw_table"),
+      label = "Download Full Growth Data fit"
+    )
   )
 }
 
@@ -171,6 +191,45 @@ batch_analysis_server <- function(
       res = 96
     )
 
+    # Allow download of growth plot and growth rate plot
+    output$download_growth_plot <- downloadHandler(
+      filename = function() {
+        "Growth_plot.svg"
+      },
+      content = function(file) {
+        ggsave(
+          file,
+          plot_growth_data(
+            fitted_spline_data(),
+            remove_points = input$remove_points
+          ),
+          device = 'svg',
+          width = 33,
+          height = 19,
+          units = 'cm'
+        )
+      }
+    )
+
+    output$download_growth_rate_plot <- downloadHandler(
+      filename = function() {
+        "Growth_rate_plot.svg"
+      },
+      content = function(file) {
+        ggsave(
+          file,
+          plot_growth_rate_data(
+            fitted_spline_data(),
+            summarised_growth_data()
+          ),
+          device = 'svg',
+          width = 33,
+          height = 19,
+          units = 'cm'
+        )
+      }
+    )
+
     #### UI output ####
     # Find the data sources available
     output$data_source_radio <- renderUI({
@@ -198,6 +257,40 @@ batch_analysis_server <- function(
       )
     })
 
-    observe(fitted_spline_data())
+    # Render summary table of growth data
+    output$summary_table <- renderTable(summarised_growth_data())
+
+    # Enable download of summarised growth data
+    output$download_table <- downloadHandler(
+      filename = function() {
+        "Summaried_growth_rate_data.csv"
+      },
+      content = function(file) {
+        write.table(
+          summarised_growth_data(),
+          file,
+          row.names = F,
+          col.names = T,
+          sep = ","
+        )
+      }
+    )
+
+    # Enable download of full spline dataset
+    output$download_raw_table <- downloadHandler(
+      ## TODO - RE-ADD
+      filename = function() {
+        "Raw_growth_rate_data_batch.csv"
+      },
+      content = function(file) {
+        write.table(
+          fitted_spline_data()[["spline_data"]],
+          file,
+          row.names = F,
+          col.names = T,
+          sep = ","
+        )
+      }
+    )
   })
 }

@@ -6,6 +6,7 @@ library(ggplot2)
 library(gridExtra)
 library(devtools)
 library(zoo)
+library(svglite)
 devtools::load_all("R")
 
 ## Source all modules
