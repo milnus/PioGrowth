@@ -13,6 +13,9 @@ batch_analysis_ui <- function(id) {
     # Let the user define what a high mu is using a slide
     uiOutput(ns("UserHighMuPercentage")),
 
+    # Let the user define the smoothing of the spline
+    uiOutput(ns("UserSplineSmoothing")),
+
     # Render plot of growth data
     plotOutput(ns("plot_batch_growth")),
 
@@ -144,7 +147,7 @@ batch_analysis_server <- function(
 
         fitted_spline_data_return[["spline_data"]] <- spline_growth_integration(
           fitted_spline_data_return,
-          spline_smoothing = 1.0
+          spline_smoothing = input$spline_smoothing
         )
 
         return(fitted_spline_data_return)
@@ -254,6 +257,14 @@ batch_analysis_server <- function(
       high_mu_range_slider(
         session$ns,
         input$high_mu_percentage
+      )
+    })
+
+    # Render slider for setting spline smoothing
+    output$UserSplineSmoothing <- renderUI({
+      smoothing_slider(
+        session$ns,
+        input$spline_smoothing
       )
     })
 
