@@ -1,12 +1,12 @@
 # Custom theme
-piogrowth_theme <- bs_theme(version = 5,
-                     bootswatch = "flatly",
-                     fg = "black", # Colour of text in ForeGround
-                     bg = "#FFFFFF", # Colour of the background
-                     primary = "#d0fbde",
-                     secondary = "lightgrey", # Colour of buttons mainly
-                     "navbar-bg" = "#0c8835",
-                     
+piogrowth_theme <- bs_theme(
+  version = 5,
+  bootswatch = "flatly",
+  fg = "black", # Colour of text in ForeGround
+  bg = "#FFFFFF", # Colour of the background
+  primary = "#d0fbde",
+  secondary = "lightgrey", # Colour of buttons mainly
+  "navbar-bg" = "#0c8835",
 )
 
 # nav_ops <- bslib::nav_op (bg = "#0c8835")
@@ -79,11 +79,19 @@ ui <- page_navbar(
     )
   ),
   nav_panel(
-    # COUNTER PANEL
+    # BATCH GROWTH PANEL
     title = "Batch growth analysis",
     layout_column_wrap(
       width = "400px",
       batch_analysis_ui("batch_analysis")
+    )
+  ),
+  nav_panel(
+    # TURBIDOSTAT GROWTH PANEL
+    title = "Turbidostat growth analysis",
+    layout_column_wrap(
+      width = "400px",
+      turbidostat_analysis_ui("turbidostat_analysis")
     )
   ),
   nav_panel(

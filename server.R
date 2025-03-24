@@ -12,4 +12,10 @@ server <- function(input, output, session) {
     calibrated_od_data_list = calibrated_data,
     raw_od_data_list = filter_data
   )
+
+  turbidostat_analysis_server(
+    "turbidostat_analysis",
+    calibrated_od_data_list = calibrated_data,
+    raw_od_data_list = filter_data
+  )
 }

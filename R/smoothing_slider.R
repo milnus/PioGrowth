@@ -7,6 +7,6 @@ smoothing_slider <- function(ns, spline_smoothing) {
 		max = 1.00,
 		value = 1.00,
 		step = 0.05,
-		ticks = F
+		ticks = FALSE,
 	)
 }

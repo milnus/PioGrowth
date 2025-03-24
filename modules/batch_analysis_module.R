@@ -5,7 +5,7 @@ batch_analysis_ui <- function(id) {
     uiOutput(ns("data_source_radio")),
 
     # Render button to process data
-    actionButton(ns("process_batch"), "Process data batch growth"),
+    actionButton(ns("process_batch"), "Process batch growth data"),
 
     # Render radio button for showing of removing points in plot
     uiOutput(ns("UserPointRemoval")),
@@ -154,7 +154,6 @@ batch_analysis_server <- function(
       })
     })
 
-    # Summarise growth data
     # Summarise growth data
     summarised_growth_data <- reactive({
       req(fitted_spline_data())
