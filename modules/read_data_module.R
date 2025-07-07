@@ -1,20 +1,21 @@
 read_data_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    fileInput(ns("upload"),
-              label = "Load PioReactor OD_readings csv file",
-              accept = c(".csv", ".txt")),
-    textOutput(ns("status"))  # Add status text output
+    fileInput(
+      ns("upload"),
+      label = "Load PioReactor OD_readings csv file",
+      accept = c(".csv", ".txt")
+    ),
+    textOutput(ns("status")) # Add status text output
   )
 }
 
 read_data_server <- function(id) {
   moduleServer(id, function(input, output, session) {
-    
+    reactive(message("[read_data_server] - Starting read_data_server module"))
+
     # Create a reactive value to store status
     status <- reactiveVal("No file loaded")
-
-    reactive(message("Test msg"))
 
     # Observe the uploading of file and read it
     read_data <- reactive({
@@ -38,6 +39,7 @@ read_data_server <- function(id) {
       status()
     })
 
+    reactive(message("[read_data_server] - Ending read_data_server module"))
     return(read_data)
   })
 }
