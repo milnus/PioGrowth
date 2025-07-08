@@ -4,10 +4,12 @@ test_that("Keep reactor", {
                                                           "P02" = 100:105),
                    "raw_time" = data.frame("hours" = 0:5,
                                            "P01" = 1:6,
-                                           "P02" = 7:12))
+                                           "P02" = 7:12), 
+                   "file_path" = "file/path.csv")
   
   expected_df <- list("pioreactor_OD_data_wide" = data.frame(hours = 0:5, "P01" = 50:55),
-                      "raw_time" = data.frame("hours" = 0:5, "P01" = 1:6))
+                      "raw_time" = data.frame("hours" = 0:5, "P01" = 1:6), 
+                      "file_path" = "file/path.csv")
   
   expect_equal(
     filter_reactors(input_df, pios_of_interest = c("P01"), filt_strat = "Keep"),
@@ -21,10 +23,12 @@ test_that("Remove reactor", {
                                                           "P02" = 100:105),
                    "raw_time" = data.frame("hours" = 0:5,
                                            "P01" = 1:6,
-                                           "P02" = 7:12))
+                                           "P02" = 7:12), 
+                   "file_path" = "file/path.csv")
   
   expected_df <- list("pioreactor_OD_data_wide" = data.frame(hours = 0:5, "P01" = 50:55),
-                      "raw_time" = data.frame("hours" = 0:5, "P01" = 1:6))
+                      "raw_time" = data.frame("hours" = 0:5, "P01" = 1:6), 
+                      "file_path" = "file/path.csv")
   
   expect_equal(
     filter_reactors(input_df, pios_of_interest = c("P02"), filt_strat = "Remove"),
@@ -38,7 +42,8 @@ test_that("Keep/Remove all/no reactors", {
                                                           "P02" = 100:105),
                    "raw_time" = data.frame("hours" = 0:5,
                                            "P01" = 1:6,
-                                           "P02" = 7:12))
+                                           "P02" = 7:12), 
+                   "file_path" = "file/path.csv")
   
   expected_df <- input_df
   
@@ -59,7 +64,8 @@ test_that("Remove all reactors", {
                                                           "P02" = 100:105),
                    "raw_time" = data.frame("hours" = 0:5,
                                            "P01" = 1:6,
-                                           "P02" = 7:12))
+                                           "P02" = 7:12), 
+                   "file_path" = "file/path.csv")
   
   expected_df <- NULL
   

@@ -51,23 +51,34 @@ filter_reactors_server <- function(id, read_data) {
     # Return the formatted data list
     return(reactive({
       message("[filter_reactors_server] - RETURN: try od_data_list")
-      tryCatch(
-        {
-          result <- filter_return_list()
-          if (is.null(result)) {
-            return(NULL)
-          } else {
-            message("[filter_reactors_server] - RETURN: od_data_list succeeded")
-            return(result)
-          }
-        },
-        error = function(e) {
-          message(
-            "[filter_reactors_server] - RETURN: od_data_list failed - returning NULL"
-          )
-          NULL
-        }
-      )
+      result <- filter_return_list()
+
+      print(paste("is.null(result)", is.null(result)))
+      if (is.null(result)) {
+        return(NULL)
+      } else {
+        message("[filter_reactors_server] - RETURN: od_data_list succeeded")
+        return(result)
+      }
+      #   tryCatch(
+      #     {
+      #       result <- filter_return_list()
+      #       print(result)
+      #       print(paste("is.null(result)", is.null(result)))
+      #       if (is.null(result)) {
+      #         return(NULL)
+      #       } else {
+      #         message("[filter_reactors_server] - RETURN: od_data_list succeeded")
+      #         return(result)
+      #       }
+      #     },
+      #     error = function(e) {
+      #       message(
+      #         "[filter_reactors_server] - RETURN: od_data_list failed - returning NULL"
+      #       )
+      #       NULL
+      #     }
+      #   )
     }))
   })
 }
