@@ -12,7 +12,7 @@ read_data_ui <- function(id) {
 
 read_data_server <- function(id) {
   moduleServer(id, function(input, output, session) {
-    reactive(message("[read_data_server] - Starting read_data_server module"))
+    message("[read_data_server] - Starting read_data_server module")
 
     # Create a reactive value to store status
     status <- reactiveVal("No file loaded")
@@ -30,8 +30,14 @@ read_data_server <- function(id) {
         type = "message"
       )
 
-      message(paste("Pioreactor input OD file:", input$upload$datapath))
-      raw_pio_od_data_to_wide_frame(input$upload$datapath)
+      paste("Pioreactor input OD file:", input$upload$datapath)
+
+      ## Read the data from the uploaded file
+      message("[read_data_server] - Reading data from file")
+      raw_od_data_list <- raw_pio_od_data_to_wide_frame(input$upload$datapath)
+
+      message("[read_data_server] - END")
+      return(raw_od_data_list)
     })
 
     # Render the status text

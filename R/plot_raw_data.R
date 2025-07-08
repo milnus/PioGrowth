@@ -1,13 +1,16 @@
 # Function for plotting all raw od readings from reactors
 plot_raw_data <- function(raw_data, filter_vector, filt_strat) {
+  print(raw_data)
   # Check if input data in not given
   if (is.null(raw_data)) {
     return()
   }
 
-  print("raw_data")
-  print(raw_data)
+  print(names(raw_data))
+  ## Isolate data to be plotted
+  raw_data <- raw_data[["pioreactor_OD_data_wide"]]
 
+  ## Construct list with dataframe for each reactor
   df_list <- sapply(
     2:ncol(raw_data),
     function(x) {
@@ -19,10 +22,10 @@ plot_raw_data <- function(raw_data, filter_vector, filt_strat) {
     simplify = FALSE
   )
 
-  # Name the indexes of the list after rectors
+  ## Name the indexes of the list after rectors
   names(df_list) <- colnames(raw_data)[2:ncol(raw_data)]
 
-  # Plot od over time for each reactor and save in a list of plots
+  ## Plot OD over time for each reactor and save in a list of plots
   ind_plots <- sapply(
     seq_along(df_list),
     function(i) {
@@ -36,6 +39,6 @@ plot_raw_data <- function(raw_data, filter_vector, filt_strat) {
     simplify = FALSE
   )
 
-  # Arrange the list of plots into a grid
+  ## Arrange the list of plots into a grid
   do.call(gridExtra::grid.arrange, c(ind_plots))
 }

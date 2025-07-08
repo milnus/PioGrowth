@@ -1,13 +1,13 @@
 raw_pio_od_data_to_wide_frame <- function(od_readings_csv) {
-  # Check if od_readings_csv is null - i.e. not given
+  ## Check if od_readings_csv is null - i.e. not given
   if (is.null(od_readings_csv)) {
     return()
   }
 
-  # Read in OD data
+  ## Read in OD data
   pioreactor_OD_data <- data.table::fread(od_readings_csv)
 
-  # Convert time to hours
+  ## Convert time to hours
   pioreactor_OD_data$timestamp <- as.POSIXct(pioreactor_OD_data$timestamp)
   pioreactor_OD_data$hours <- difftime(
     pioreactor_OD_data$timestamp,
@@ -15,7 +15,7 @@ raw_pio_od_data_to_wide_frame <- function(od_readings_csv) {
     units = "hours"
   )
 
-  # Reshape the data into a wide format
+  ## Reshape the data into a wide format
   columns_oi <- c(
     "hours",
     "pioreactor_unit",
@@ -31,7 +31,7 @@ raw_pio_od_data_to_wide_frame <- function(od_readings_csv) {
     direction = "wide"
   ))
 
-  # Order reactor columns
+  ## Order reactor columns
   reactor_column_names <- colnames(pioreactor_OD_data_wide)[
     2:ncol(pioreactor_OD_data_wide)
   ]
@@ -41,7 +41,7 @@ raw_pio_od_data_to_wide_frame <- function(od_readings_csv) {
     pioreactor_OD_data_wide
   ))]
 
-  # Isolate OD from raw_time columns
+  ## Isolate OD from raw_time columns
   od_max_col <- (ncol(pioreactor_OD_data_wide) - 1) / 2 + 1
   min_raw_time_col <- od_max_col + 1
   max_raw_time_col <- ncol(pioreactor_OD_data_wide)
@@ -51,9 +51,9 @@ raw_pio_od_data_to_wide_frame <- function(od_readings_csv) {
     "raw_time" = pioreactor_OD_data_wide[, c(
       1,
       min_raw_time_col:max_raw_time_col
-    )]
+    )],
+    file_path = od_readings_csv
   )
 
-  #return(pioreactor_OD_data_wide)
   return(raw_data_list)
 }
