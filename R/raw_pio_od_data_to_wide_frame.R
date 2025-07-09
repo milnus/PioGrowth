@@ -52,7 +52,7 @@ raw_pio_od_data_to_wide_frame <- function(od_readings_csv) {
       1,
       min_raw_time_col:max_raw_time_col
     )],
-    file_path = od_readings_csv
+    "file_path" = od_readings_csv
   )
 
   return(raw_data_list)
