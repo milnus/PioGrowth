@@ -7,6 +7,7 @@ library(gridExtra)
 library(devtools)
 library(zoo)
 library(svglite)
+library(shinyjs)
 devtools::load_all("R")
 
 ## Source all modules
