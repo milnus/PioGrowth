@@ -20,12 +20,23 @@ split_turbidostat_data <- function(
 	## Split the of each reactor based on Dilution Events
 	split_reactor_data <- list()
 
+	print(
+		"[split_turbidostat_data] - Splitting turbidostat data into individual growth curves"
+	)
+
 	for (i in 2:ncol(od_data_outliers_masked)) {
+		message(
+			paste(
+				"[split_turbidostat_data] - Processing reactor",
+				colnames(od_data_outliers_masked)[i]
+			)
+		)
 		## Isolate timestamps and OD values
 		reactor_df <- od_data_outliers_masked[, c(1, i)]
 
 		## Rename columns
 		colnames(reactor_df) <- c("timestamp", "od_reading")
+		reactor_df$timestamp <- as.numeric(reactor_df$timestamp)
 
 		## Remove NA values (non-observed and outliers)
 		reactor_df <- reactor_df[!is.na(reactor_df[, "od_reading"]), ]

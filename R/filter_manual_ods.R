@@ -20,7 +20,6 @@ filter_manual_ods <- function(manual_od_readings, od_data_list) {
     message("[filter_reactors()] - All manual readings filtered out")
     return()
   } else {
-    print(manual_od_readings_filtered)
     return(manual_od_readings_filtered)
   }
 }

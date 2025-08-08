@@ -4,9 +4,9 @@ calibration_plot <- function(
   fixed_intercept,
   add_zero_point
 ) {
-  print("[calibration_plot] - STARING")
-  print(paste("[calibration_plot] - fixed_intercept:", fixed_intercept))
-  print(paste("[calibration_plot] - add_zero_point:", add_zero_point))
+  message("[calibration_plot] - STARING")
+  message(paste("[calibration_plot] - fixed_intercept:", fixed_intercept))
+  message(paste("[calibration_plot] - add_zero_point:", add_zero_point))
 
   if (length(add_zero_point) == 0) {
     add_zero_point <- FALSE

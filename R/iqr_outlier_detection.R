@@ -4,7 +4,7 @@ iqr_outlier_detection <- function(od_data) {
 
   # Check that K is odd, so that it has a center point.
   if (k %% 2 == 0) {
-    print("k cannot be even!")
+    message("k cannot be even!")
     return()
   }
 
@@ -22,7 +22,7 @@ iqr_outlier_detection <- function(od_data) {
     # add roll to find median and IQR
     median_roll <- zoo::rollapply(
       data_oi[, 2],
-      align = 'center',
+      align = "center",
       fill = NA,
       width = k,
       FUN = median,
@@ -30,7 +30,7 @@ iqr_outlier_detection <- function(od_data) {
     )
     iqr_roll <- zoo::rollapply(
       data_oi[, 2],
-      align = 'center',
+      align = "center",
       fill = NA,
       width = k,
       FUN = IQR,

@@ -1,12 +1,10 @@
 # Function for plotting all raw od readings from reactors
 plot_raw_data <- function(raw_data, filter_vector, filt_strat) {
-  print(raw_data)
   # Check if input data in not given
   if (is.null(raw_data)) {
     return()
   }
 
-  print(names(raw_data))
   ## Isolate data to be plotted
   raw_data <- raw_data[["pioreactor_OD_data_wide"]]
 

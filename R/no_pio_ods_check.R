@@ -4,19 +4,18 @@ no_pio_ods_check <- function(
   x_measurements_oi
 ) {
   ##TODO - Make so that this function can be used if only some reactors have calibration measurements from pio and manual
-  print("[no_pio_ods_check] - STARTING")
+  message("[no_pio_ods_check] - STARTING")
 
   # Create a return list with first and last ten for later plotting.
   first_last_x_list <- list()
 
   # Isolate the raw pio od readings
   raw_pio_od <- od_data_list[["filtered_data"]][["pioreactor_OD_data_wide"]]
-  message(raw_pio_od)
 
   # Check if no PioReactor ODs were given
   if (all(is.na(calibration_table[, "pio_od"]))) {
     for (name in unique(calibration_table[, "name"])) {
-      print(paste("[no_pio_ods_check]   -   ", name))
+      message(paste("[no_pio_ods_check]   -   ", name))
 
       # grep out the column
       od_column_oi <- grep(paste0("od_reading.", name), colnames(raw_pio_od))

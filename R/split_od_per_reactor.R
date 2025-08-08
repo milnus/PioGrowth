@@ -4,7 +4,7 @@ split_od_per_reactor <- function(
   fixed_intercept,
   add_zero_point
 ) {
-  print("[split_od_per_reactor] - STARING")
+  message("[split_od_per_reactor] - STARING")
   calibration_table <- calibration_table[["calibration_table"]]
 
   # Check if an origin point should be added
@@ -23,7 +23,7 @@ split_od_per_reactor <- function(
     list(calibration_table[, "name"])
   )
 
-  print(paste("[split_od_per_reactor] - add_zero_point:", add_zero_point))
+  message(paste("[split_od_per_reactor] - add_zero_point:", add_zero_point))
   if (add_zero_point & !fixed_intercept) {
     for (i in 1:length(split_reactor_table)) {
       split_reactor_table[[i]][nrow(split_reactor_table[[i]]) + 1, ] <- list(
@@ -37,7 +37,7 @@ split_od_per_reactor <- function(
   # Construct a linear model for each reactor
 
   # return list of linear models
-  print(paste("[split_od_per_reactor] - fixed_intercept:", fixed_intercept))
+  message(paste("[split_od_per_reactor] - fixed_intercept:", fixed_intercept))
   if (fixed_intercept) {
     reactor_lm_models <- lapply(
       split_reactor_table,

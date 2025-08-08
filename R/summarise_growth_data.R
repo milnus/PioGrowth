@@ -89,7 +89,7 @@ summarise_growth_data <- function(tidy_growth_data, high_mu_percentage = 0.9) {
 		"High_mu_max_time",
 		high_mu_time_name
 	)
-	print(head(summarised_data))
+
 	summarised_data[, 2:ncol(summarised_data)] <- round(
 		summarised_data[, 2:ncol(summarised_data)],
 		4

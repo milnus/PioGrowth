@@ -11,7 +11,7 @@ plot_growth_data <- function(od_data_list, remove_points) {
   p <- ggplot(fitted_growth_data_return)
 
   # Add points if user want these
-  print(paste("remove_points:", remove_points))
+  message(paste("remove_points:", remove_points))
   if (remove_points != TRUE) {
     p <- p +
       geom_point(

@@ -43,7 +43,7 @@ spline_growth_integration <- function(
     ]
 
     # Transform OD values to log (taking ln(y/y0))
-    growth_data_list[[reactor_name]]$OD_values_log = log(
+    growth_data_list[[reactor_name]]$OD_values_log <- log(
       growth_data_list[[reactor_name]]$OD_values /
         growth_data_list[[reactor_name]]$OD_values[1]
     ) +
